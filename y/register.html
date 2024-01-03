@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup Page</title>
+  <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="login-box">
+      <div class="logo">
+         <img src="https://firebasestorage.googleapis.com/v0/b/asian-9aa59.appspot.com/o/ASIAN%20TOURIST%20SPOT.png?alt=media&token=267619f9-c551-439a-9e31-27cf46dcef9f" alt="Logo" class="logo">
+         <h3 class="title">REGISTRATION</h3>
+      </div>
+      <form>
+        <input type="text" placeholder="Username" class="input-field" id="username">
+        <span class="error" id="userNameError"></span>
+        <input type="email" placeholder="Email" class="input-field" id="email1">
+        <span class="error" id="emailError"></span>
+        <input type="password" placeholder="Password" class="input-field" id="password1">
+        <span class="error" id="passwordError"></span>
+        <button type="submit" class="login-button" id="signUpBtn" disabled>Sign up</button>
+      </form>
+      <p class="account-text">Already have an account? <a href="./login.html">Sign In</a></p>
+    </div>
+  </div>
+  <script src="script.js" type="module"></script>
+</body>
+</html>

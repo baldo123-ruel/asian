@@ -1,0 +1,122 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f2f2f2;
+  }
+  
+  .container {
+    width: 100%;
+    max-width: 600px;
+    padding: 0 20px;
+  }
+  
+  .login-box {
+    background-color: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .logo {
+    width: 100px; /* Adjust size as needed */
+    height: auto;
+    margin-bottom: 10px;
+  }
+  .logo{
+      position: relative;
+      width:100%;
+      display: flex;
+    justify-content: space-between;
+  }
+  .title{
+    display:block;
+    font-size: 13px;
+     width:100%;
+  }
+  
+  .input-field {
+    width: 100%;
+    padding: 15px;
+    outline: none;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    box-sizing: border-box;
+  }
+  
+  .login-button {
+     width: 100%;
+    padding: 15px;
+    background-color: #ccc; /* Gray */
+    color: white;
+    border: none;
+    border-radius:15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .login-button:hover {
+    background-color: #3454b4;
+  }
+  
+  .account-text {
+    margin-top: 20px;
+    font-size: 14px;
+  }
+  
+  .account-text a {
+    color: #4169E1;
+    text-decoration: none;
+  }
+  
+  .account-text a:hover {
+    text-decoration: underline;
+  }
+  
+  /* For screens smaller than 600px (typical mobile phones) */
+  @media screen and (max-width: 600px) {
+    .login-box {
+      padding: 20px;
+    }
+  
+    .logo {
+      width: 80px; /* Adjust size as needed */
+    }
+  }
+  
+  /* For screens between 600px and 900px (small tablets) */
+  @media screen and (min-width: 600px) and (max-width: 900px) {
+    .login-box {
+      padding: 30px;
+    }
+  }
+  
+  /* For screens larger than 900px (desktops, laptops) */
+  @media screen and (min-width: 900px) {
+    .login-box {
+      padding: 40px;
+    }
+  }
+
+  .message {
+    font-size: 18px;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  /* CSS for success message */
+  .message.success {
+    color: green;
+    /* Additional styles for success message */
+  }
+  
+  /* CSS for error message */
+  .message.error {
+    color: red;
+    /* Additional styles for error message */
+  }

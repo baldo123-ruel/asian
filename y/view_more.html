@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View More</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap">
+   <style>
+    /* Add CSS for your image and title layout */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+    * {
+    box-sizing: border-box;
+}
+    .spot-image {
+      position: relative;
+      width:100%
+    }
+    .spot-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 0px;
+box-shadow:  -16px 16px 88px #e6e6e6,
+             16px -16px 88px #ffffff;
+    }
+    .spot-title {
+      position: absolute;
+      bottom:0;
+      left: 0;
+      width: 100%;
+      padding: 10px;
+          background:rgb(0,0,0, 0.1);
+      box-sizing: border-box;
+      font-weight: 700; /* Bold font weight */
+      color: white;
+    }
+    .content{
+      position:relative;
+      width:100%;
+       border-radius: 30px;
+box-shadow:  -16px 16px 88px #e6e6e6,
+             16px -16px 88px #ffffff;
+      padding:20px;
+      margin-top:20px;
+    }
+    #map {
+            height: 400px;
+            margin:10px;
+            border-radius: 30px;
+box-shadow:  -16px 16px 88px #e6e6e6,
+             16px -16px 88px #ffffff;
+            width: 100%;
+        }
+        .shadow{
+          
+        }
+    
+  </style>
+  </head>
+  <body>
+
+    <div class="spot-image">
+    <img id="selected-image" src="" alt="Spot Image">
+    <div class="shadow"></div>
+    <div class="guide">
+      <div class="spot-title" id="selected-title"> 
+      </div>
+    </div>
+    </div>
+  
+    <div class="content">
+      <h3>
+        Why Go To Maldives
+      </h3>
+      <span class="parag">
+        You've seen photos of the Maldives before: picture-perfect private villas suspended over striking blue waters, alabaster white sand beaches and spectacular sunsets dipping into the horizon. The scenic beauty of the Maldives is something to behold, something you can't quite understand until you're there in person.
+The island nation of the Maldives is popular with honeymooners looking for seclusion and adventurers looking to explore the depths of the sea on a scuba diving and snorkeling excursion. Travelers seeking relaxation can unwind at one of the island spas and all visitors should certainly spend a day exploring the Maldivian capital of Malé. The hotels in this region are also spectacular, ranging from underwater hotels to overwater bungalows to incredibly beautiful resorts. However, getting to and staying in this tropical paradise requires patience (there are no direct flights from the United States) and plentiful cash. Located between the Arabian and Laccadive seas, roughly 500 miles southwest of Sri Lanka, the Maldives is about as isolated as you can get – and that's just another one of its many allures.
+      </span>
+    </div>
+    <div id="map"></div>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzErA4hoh95i9LyxhEZIm6Bff97jtMKX4&callback=initMap" async defer></script>
+  <script>
+  const locations = [
+  {
+    title: "Maldives",
+    latitude: 4.173730,
+    longitude: 73.503960,
+    description: "You've seen photos of the Maldives before: picture-perfect private villas suspended over striking blue waters, alabaster white sand beaches and spectacular sunsets dipping into the horizon. The scenic beauty of the Maldives is something to behold, something you can't quite understand until you're there in person. The island nation of the Maldives is popular with honeymooners looking for seclusion and adventurers looking to explore the depths of the sea on a scuba diving and snorkeling excursion. Travelers seeking relaxation can unwind at one of the island spas and all visitors should certainly spend a day exploring the Maldivian capital of Malé. The hotels in this region are also spectacular, ranging from underwater hotels to overwater bungalows to incredibly beautiful resorts. However, getting to and staying in this tropical paradise requires patience (there are no direct flights from the United States) and plentiful cash. Located between the Arabian and Laccadive seas, roughly 500 miles southwest of Sri Lanka, the Maldives is about as isolated as you can get – and that's just another one of its many allures."
+  },
+  {
+    title: "Tokyo",
+    latitude: 35.689487,
+    longitude: 139.691711,
+    description: "\"Animated\" is perhaps the best word to describe Tokyo. Crazy about its anime, Japan's mega city is constantly buzzing with movement – feet clacking down sidewalks, cars zooming along streets, subway trains humming below ground, ships cruising in and out. And yet bright lights and loud signs beg you to pause, to break your motion for just one second to pray (oops, we mean pay) at the altar of consumerism. This is a city that feeds on motion and progress. But when you want to stop in Tokyo, the city will certainly make it worth your while. The tech-savvy locals may whizz past the monuments and urban parks daily (except during the cherry blossom season when everyone floods the green space), but, we assure you, the museums and historical sites are world-class. Here, there are photos to be taken, sushi to be eaten and a lot of shopping to be done. So what are you waiting for? You better get a move on."
+  },
+  {
+    title: "Hong Kong",
+    latitude: 22.396427,
+    longitude: 114.109497,
+    description: "To outsiders, Hong Kong can raise a lot of questions: \"Is it part of China or not?\" \"Is it one island or two?\" \"Do they speak English or Mandarin? Or both?\" And foreigners have a good reason to ask them. This territory, made of multiple islands, returned to China's possession in 1997 after more than a hundred years of British occupation. Upon its reunification with China, Hong Kong added certain stipulations that provide a unique degree of autonomy. For instance, the official currency remains the Hong Kong dollar (HKD); English and Chinese are the official languages; and the tiny nation has an independent judiciary system. In short, China and Hong Kong observe a \"one country, two systems\" policy that can have many foreigners scratching their heads. But don't question it. Just accept it and enjoy everything this territory has to offer. Hong Kong distinguishes itself from its Chinese brethren like Shanghai and Beijing with its vibrant, multifaceted culture and stunning cityscape. This British-Chinese hybrid astounds visitors with its striking juxtaposition of dense skyscrapers and lush landscapes. From sandy beaches to rugby pitches, there's more fresh air than most travelers suspect. And, of course, as a world-class metropolis, Hong Kong boasts numerous urban diversions, such as culinary hot spots and museums. After visiting Hong Kong, the only question you might be asking is: \"Why didn't I get here sooner?\""
+  }
+];
+    // Get the selected spot from localStorage
+    const selectedSpot = JSON.parse(localStorage.getItem('selectedSpot'));
+
+    // Access the properties of the selected spot and display them in view_more.html
+    const imageElement = document.getElementById('selected-image');
+    imageElement.src = selectedSpot.image;
+
+    const titleElement = document.getElementById('selected-title');
+    titleElement.textContent = selectedSpot.title;
+    
+    const Title = selectedSpot.title;
+    const selectedLocation = locations.find(location => location.title === Title);
+
+// Log the filtered location data
+    var lat = selectedLocation.latitude;
+    var long = selectedLocation.longitude;
+    
+    function initMap() {
+            // Initialize the map
+            const map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: lat, lng: long },
+                zoom: 12, // Adjust the zoom level as needed
+            });
+
+            // Add markers for tourist spots
+            const touristSpots = [
+                {
+                    name: selectedLocation.title,
+                    location: { lat: lat, lng: long },
+                },
+                // Add more tourist spots similarly
+            ];
+
+            touristSpots.forEach((spot) => {
+                new google.maps.Marker({
+                    position: spot.location,
+                    map: map,
+                    title: spot.name,
+                });
+            });
+        }
+  </script>
+       
+       
+  </body>
+</html>

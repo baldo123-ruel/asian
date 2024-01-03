@@ -1,0 +1,610 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asian Tourist Spots</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.3/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.3/firebase-database.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      box-sizing:border-box;
+      margin: 0;
+      padding: 0;
+    }
+     * {
+    box-sizing: border-box;
+}
+    .container{
+      position: relative;
+      width:100%;
+      overflow:hidden;
+      max-width:100%;
+      height:auto;
+    }
+   
+   header {
+     position:relative;
+     width:100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px;
+      background-color: royalblue;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+
+    .logo {
+      width: 40px;
+      border-radius: 50%;
+      height: 40px;
+    }
+    .user {
+      font-weight: bold;
+      color:white;
+      font-size: 13px;
+    }
+    main {
+      width:100%;
+      padding: 20px;
+      display:flex;
+      position:relative;
+      align-items:center;
+      z-index: -10000;
+    }
+    .spot {
+      padding: 15px;
+      margin-bottom: 20px;
+     
+    }
+    .spot img {
+      width: 100px;
+      height: auto;
+      margin-right: 15px;
+    }
+    .spot-content {
+      flex-grow: 1;
+      font-size: 13px;
+    }
+    .spot-actions {
+      display: flex;
+      cursor:pointer;
+      gap:2rem;
+      align-items: center;
+    }
+    .heart {
+      margin-right: 10px;
+      cursor: pointer;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #f2f2f2;
+      box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .subscribe-form {
+      margin-top: 10px;
+    }
+    @media (max-width: 767px) {
+  /* Styles for mobile devices (less than or equal to 767px width) */
+  /* Example: Adjust header styles for mobile */
+  header{
+    z-index:1;
+  }
+  .title_content{
+    padding:10px;
+  }
+  .search{
+    position: relative;
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    height:auto;
+  }
+#searchInput{
+  z-index:1;
+   margin-top:5%;
+   width:100%;
+   border:none;
+   margin-left:20px;
+   margin-right:20px;
+   outline:none;
+   border-radius: 50px;
+border-radius: 62px;
+background: #ffffff;
+box-shadow:  -26px 26px 100px #bababa,
+             26px -26px 100px #ffffff;
+   padding:15px;
+   border-radius:15px;
+   font-size:13px;
+}
+main{
+  z-index:1;
+  width:100%;
+  position:relative;
+}
+.spot {
+      /*display: flex;*/
+background: #ffffff;
+box-shadow:  -16px 16px 88px #e6e6e6,
+             16px -16px 88px #ffffff;
+      /*align-items: center;*/
+      position:relative;
+      display:flex;
+      padding:20px;
+      flex-direction:column;
+      margin-bottom:20px;
+      border-radius:30px;
+      /*padding: 15px;*/
+      /*margin-bottom: 20px;*/
+      /*background-color: #fff;*/
+      
+     
+    }
+    .spot img {
+      max-width: 100%;
+      width: 100%;
+      height: auto;
+    }
+    .spot-content {
+      flex-grow: 1;
+      padding:15px;
+      font-size: 13px;
+    }
+    .expanded-image {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: contain;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.9);
+      cursor: pointer;
+    }
+    .view-button {
+      position: absolute;
+      left:30px;
+      top:30px;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+      background-color: rgba(255, 255, 255, 0.7);
+      padding: 5px 10px;
+      font-size:13px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .like-icon, .dislike-icon, .comment-icon {
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 50%;
+     }
+
+    .like-icon.active,
+    .dislike-icon.active {
+      color: royalblue;
+    }
+    .modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 111;
+  padding: 10px;
+}
+
+.modal-content {
+  padding: 20px;
+}
+
+.modal-body {
+  font-size: 13px;
+  text-align: center;
+}
+
+/* Modal tail/triangle */
+.modal::before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 15px solid #fff;
+  top: -15px;
+  left: calc(50% - 15px);
+}
+.comment_action{
+  position:relative;
+  margin-top:10px;
+  width:100%;
+  display:flex;
+}
+.new-comment{
+  border:none;
+  outline:none;
+  padding:10px;
+  font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+  border-radius: 62px;
+background: #ffffff;
+box-shadow:  -16px 16px 88px #e6e6e6,
+             16px -16px 88px #ffffff;
+}
+.add-comment-button{
+  border:none;
+  cursor:pointer;
+  outline:none;
+  background: transparent;
+}
+.comment-container{
+  position:relative;
+  width:100%;
+}
+.title-date span{
+   font-size:10px;
+}
+.title-date{
+  display:flex;
+  justify-content:space-between;
+  align-items:center
+}
+.content-comment{
+  padding:10px;
+  width:auto;
+  font-size:12px;
+ border-radius: 50px;
+background: #ffffff;
+box-shadow:  -5px -5px 11px #e6e6e6,
+             5px 5px 11px #ffffff;
+}
+
+  /* Other mobile-specific styles can be added here */
+}
+.expanded-image {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: contain;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.9);
+      cursor: pointer;
+    }
+    .view-button {
+      position: absolute;
+      background-color: rgba(255, 255, 255, 0.7);
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .readmore{
+       text-decoration:none;
+       font-size:12px;
+       color:royalblue;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+<header id="main-header">
+  <img src="https://firebasestorage.googleapis.com/v0/b/asian-9aa59.appspot.com/o/ASIAN%20TOURIST%20SPOT.png?alt=media&token=267619f9-c551-439a-9e31-27cf46dcef9f" alt="Logo" class="logo">
+  <div class="user" id="username"></div>
+</header>
+<div class="title_content">
+  <h2>Best Asion tourist spot you should visit.</h2>
+</div>
+<div class="modal" id="likeModal">
+  <div class="modal-content">
+    <div class="modal-body">
+      <p>Awesome</p>
+    </div>
+  </div>
+</div>
+<div class="search">
+<input type="text" id="searchInput" placeholder="Search...">
+</div>
+<main>
+ 
+ <div id="spots-container"></div>
+
+  <!-- Add more spots in a similar manner -->
+</main>
+
+<footer>
+  <p>All rights reserved</p>
+  <form class="subscribe-form" action="#" method="post">
+    <label for="email" style="display: none;">Subscribe for updates:</label>
+    <input type="email" id="email" name="email" placeholder="Your email" style="border-radius: 15px; border: none; padding: 15px;">
+    <button type="submit" style="border-radius:15px; border:none;margin-top: 10px; background-color: royalblue; color: white; padding: 10px;">Subscribe</button>
+  </form>
+</footer>
+</div>
+
+ <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+import { getDatabase, ref, onValue, query, orderByChild, equalTo, update, push } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDtZhNePKFNheo17JCIE-ugm9zITBqmuOA",
+  authDomain: "asiantouristspot.firebaseapp.com",
+  databaseURL: "https://asiantouristspot-default-rtdb.firebaseio.com",
+  projectId: "asiantouristspot",
+  storageBucket: "asiantouristspot.appspot.com",
+  messagingSenderId: "926746849321",
+  appId: "1:926746849321:web:73b2bf2d027d828e8aac38",
+  measurementId: "G-PLN6KYPR2H"
+};
+const userName = localStorage.getItem('userName');
+const name = document.getElementById("username");
+name.innerHTML = userName;
+  // Initialize Firebase
+ const app = initializeApp(firebaseConfig);
+  // Reference to the Firebase Realtime Database
+  const db = getDatabase(app);
+
+
+  let filteredSpots = [];
+    const spots = [
+      {
+        image: "https://travel.usnews.com/dims4/USNEWS/4879621/2147483647/resize/976x652%5E%3E/crop/976x652/quality/85/?url=https%3A%2F%2Ftravel.usnews.com%2Fimages%2Fmaldives_beach1_getty_levente_bodo_8jJGXCJ.jpg",
+        title: "Maldives",
+        description: "If your dream vacation involves posting up on a postcard-worthy beach, the Maldives is for you. This far-flung destination, which is located about 370 miles from civilization in the Indian Ocean, is made up of more than 1,100 idyllic islands (roughly 200 of which are inhabited). The Maldives feature lush tropical landscapes, unparalleled white sand beaches, crystal-clear ocean waters and coral reefs that prompt extensive exploration. The best way to experience this slice of paradise? Stay in one of many overwater bungalows, of course."
+      },
+      {
+        image: "https://www.dotwnews.com/modules/image_resize/image_resize.php?image=/uploads/posts/21066.jpeg&width=860&height=468&cropratio=860:468",
+        title: "Tokyo",
+        description: "Tokyo is as fast-paced as cities come – it's the most populated city in the world, after all. Japan's capital features neon-lit skyscrapers and crowded streets that novice visitors may find dizzying, but its one-of-a-kind offerings can't be missed. Spend days touring quirky museums, exploring fascinating architecture or visiting Odaiba for its premier shopping scene. Or, take in some quieter, more peaceful moments at a holy site like the Meiji Shrine or Sensoji Temple. Tokyo's unrivaled gastronomic landscape (think: sushi, ramen, sky-high cocktail bars and more Michelin darlings than you could hope to visit) also makes it a bucket list destination for foodies."
+      },
+      {
+        image: "https://travel.usnews.com/dims4/USNEWS/e18818f/2147483647/resize/976x652%5E%3E/crop/976x652/quality/85/?url=https%3A%2F%2Ftravel.usnews.com%2Fimages%2F486878520_kKQRPuf.jpg",
+        title: "Hong Kong",
+        description: "A British colony until 1997, Hong Kong's strong Western influence sets it apart from China's mainland metropolises. Beyond Hong Kong's sleek, towering skyscrapers (best admired from Victoria Peak), visitors can find natural and cultural gems on the more than 250 outlying islands, such as Lantau Island, or shop the city's bustling street markets. Dim sum is a must, but Hong Kong's robust dining scene also offers everything from street food to Michelin-starred fine dining. And when the sun goes down, watch the Symphony of Lights laser show dazzle the skyline along Victoria Harbor."
+      }
+      // Add more spot objects here as needed
+    ];
+
+   function displaySpots(spots) {
+      const spotsContainer = document.getElementById('spots-container');
+  spotsContainer.innerHTML = ''; 
+      spots.forEach((spot, index) => {
+        const spotElement = document.createElement('div');
+        spotElement.classList.add('spot');
+        spotElement.innerHTML = `
+          <img src="${spot.image}" alt="${spot.title}">
+          <div class="spot-content">
+          <button class="view-button" data-index="${index}">View</button>
+            <h2>${spot.title}</h2>
+            <p>${spot.description} <a class="readmore" href="#" data-index="${index}">Read More ></a></p>
+           
+            <div class="spot-actions">
+               <span class="like-icon"><i class="far fa-thumbs-up"></i></span>
+              <span class="comment-icon"><i class="far fa-comment"></i></span>
+            </div>
+            <div class="comment-section" style="display: none;">
+      <div class="comment-container"></div>
+        <!-- Comment items will be added dynamically here -->
+      <div class="comment_action">
+      <input type="text" class="new-comment" placeholder="Write a comment"/>
+      <button class="add-comment-button" data-index="${index}">
+  <i class="fas fa-paper-plane" style="color:royalblue;"></i> <!-- Replace with your preferred send icon class -->
+</button>
+      </div>
+    </div>
+     </div>
+          </div>
+        `;
+     
+        spotsContainer.appendChild(spotElement);
+         const readMoreLinks = spotElement.querySelectorAll('.readmore');
+        readMoreLinks.forEach(link => {
+      link.addEventListener('click', function(event) {
+        event.preventDefault();
+        const selectedIndex = this.getAttribute('data-index');
+        const selectedSpot = spots[selectedIndex];
+        localStorage.setItem('selectedSpot', JSON.stringify(selectedSpot));
+        window.location.href = 'view_more.html';
+        console.log("SPOTS", selectedSpot);
+        });
+      });
+      
+        const addCommentButton = spotElement.querySelector('.add-comment-button');
+        addCommentButton.addEventListener('click', function() {
+          const commentInput = spotElement.querySelector('.new-comment');
+          const commentText = commentInput.value.trim();
+
+          if (commentText !== '') {
+            addComment(index, commentText);
+            commentInput.value = ''; // Clear the comment input field
+            alert("Added");
+            // You might want to display a success message or update the UI here
+          } else {
+            // Handle empty comment submission (optional)
+          }
+        });
+        
+       const commentContainer = spotElement.querySelector('.comment-container');
+const spotsRef = ref(db, 'comments');
+const currentSpotTitle = spot.title;
+console.log(currentSpotTitle);
+onValue(spotsRef, (snapshot) => {
+   commentContainer.innerHTML = '';
+  if (snapshot.exists()) {
+    const spotsData = snapshot.val();
+    const specificSpotComments = Object.values(spotsData).filter(comment => comment.title === currentSpotTitle);
+    
+    console.log(specificSpotComments);
+    specificSpotComments.forEach(comment => {
+     const commentElement = document.createElement('div');
+        commentElement.classList.add('comment-item');
+
+        // Create the HTML structure for each comment
+        commentElement.innerHTML = `
+          <div class="title-date">
+            <h3>${comment.user}</h3>
+            <span>${comment.date}</span>
+          </div>
+          <div class="content-comment">
+            <span>${comment.text}</span>
+          </div>
+        `;
+
+        commentContainer.appendChild(commentElement);
+    });
+    const commentIcon = spotElement.querySelector('.comment-icon');
+    commentIcon.innerHTML = `
+      <i class="far fa-comment"></i>
+      <span class="badge">${specificSpotComments.length}</span>
+    `;
+    
+
+  } else {
+    // Handle the case when no data exists at 'comments' reference
+  }
+});
+      });
+      
+  
+
+      document.querySelectorAll('.view-button').forEach(button => {
+        button.addEventListener('click', function() {
+          const index = this.dataset.index;
+          const image = document.createElement('img');
+          image.src = spots[index].image;
+          image.alt = spots[index].title;
+          image.classList.add('expanded-image');
+
+          const existingExpandedImage = document.querySelector('.expanded-image');
+          if (existingExpandedImage) {
+            existingExpandedImage.remove();
+          }
+
+          document.body.appendChild(image);
+
+          image.addEventListener('click', function() {
+            this.remove();
+          });
+        });
+      });
+      
+      
+    }
+    
+    function filterSpots() {
+    const searchInput = document.getElementById('searchInput');
+    const searchText = searchInput.value.toLowerCase(); // Get input value and convert to lowercase
+
+    if (searchText === '') {
+       const spotsContainer = document.getElementById('spots-container');
+     spotsContainer.innerHTML = ''; 
+     displaySpots(spots);
+      filteredSpots = []; // Clear filtered list
+    return;
+    }
+
+    filteredSpots = spots.filter(spot =>
+      spot.title.toLowerCase().includes(searchText)
+    );
+
+    displaySpots(filteredSpots); // Display filtered spots
+
+    console.log('Filtered Spots:', filteredSpots); // Log filtered spots to console
+  }
+
+  document.getElementById('searchInput').addEventListener('input', filterSpots);
+  
+   function addComment(index, commentText) {
+      const currentDate = new Date();
+const formatted = formatDate(currentDate);
+      const spotTitle = spots[index].title; // Get the title of the spot
+      const commentsRef = ref(db,"comments");
+      const newComment = new Comment(spotTitle,userName, commentText, formatted );
+      const newUserRef = push(commentsRef);
+      update(newUserRef, newComment);
+    }
+
+  displaySpots(spots);
+
+
+function toggleLikeIcon(likeIcon) {
+  if (likeIcon.classList.contains('active')) {
+    likeIcon.style.color = ''; // Reset to default color (gray)
+    likeIcon.classList.remove('active');
+  } else {
+    showLikeModal()
+    likeIcon.style.color = 'royalblue'; // Change color to royalblue
+    likeIcon.classList.add('active');
+  }
+}
+
+document.querySelectorAll('.like-icon').forEach(likeIcon => {
+  likeIcon.addEventListener('click', function() {
+    toggleLikeIcon(this);
+  });
+});
+
+function showLikeModal() {
+  const modal = document.getElementById('likeModal');
+  modal.style.display = 'block';
+  
+  setTimeout(function() {
+    modal.style.display = 'none'; // Hide the modal after 2 seconds
+  }, 2000);
+}
+
+document.querySelectorAll('.comment-icon').forEach(commentIcon => {
+  commentIcon.addEventListener('click', function() {
+    const spotContent = this.closest('.spot').querySelector('.spot-content');
+    const commentSection = spotContent.querySelector('.comment-section');
+    
+    if (commentSection.style.display === 'none' || commentSection.style.display === '') {
+      commentSection.style.display = 'block'; // Show comment section
+    } else {
+      commentSection.style.display = 'none'; // Hide comment section
+    }
+  });
+});
+
+class Comment {
+  constructor(title,user, text, date) {
+    this.title = title;
+    this.user = user;
+    this.text = text;
+    this.date = date;
+  }
+}
+
+function formatDate(date) {
+  const months = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
+  const month = months[date.getMonth()];
+  const day = date.getDate();
+  const year = date.getFullYear();
+  
+  let hours = date.getHours();
+  const minutes = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
+  const ampm = hours >= 12 ? 'pm' : 'am';
+  hours %= 12;
+  hours = hours || 12;
+
+  const formattedDate = `${month} ${day} ${year} | ${hours}:${minutes}${ampm}`;
+  return formattedDate;
+}
+
+  </script>
+</body>
+</html>
+
